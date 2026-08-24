@@ -12,6 +12,7 @@ const { pool } = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const APP_ID = 'billing';
 const JWT_SECRET = process.env.JWT_SECRET || 'change-this-secret-before-production';
 const COLLECTIONS = ['clients', 'services', 'quotations', 'invoices', 'payments', 'projects', 'expenses', 'activities', 'trash'];
 const SINGLETONS = ['companySettings'];
@@ -25,6 +26,13 @@ app.use(cors({ origin: process.env.CORS_ORIGIN || true, credentials: true }));
 app.use(express.json({ limit: '25mb' }));
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 800 }));
 app.use(express.static(path.join(__dirname, '..')));
+app.use('/api', (req, res, next) => {
+  const requestedApp = req.get('X-Reach-App');
+  if (requestedApp && requestedApp !== APP_ID) {
+    return res.status(409).json({ message: 'This is the REACH Billing server. Open the Billing app on localhost:3000.' });
+  }
+  return next();
+});
 
 function signUser(user) {
   return jwt.sign({
@@ -256,8 +264,15 @@ app.get('/api/admin/tenants', requireAuth, requirePlatformAdmin, async (req, res
      FROM organizations
      LEFT JOIN users ON users.organization_id = organizations.id AND users.role = 'owner'
      LEFT JOIN app_records ON app_records.organization_id = organizations.id
+     WHERE NOT EXISTS (
+       SELECT 1
+       FROM users admin_users
+       WHERE admin_users.organization_id = organizations.id
+         AND lower(admin_users.email) = ANY($1::text[])
+     )
      GROUP BY organizations.id, users.email
-     ORDER BY organizations.created_at DESC`
+     ORDER BY organizations.created_at DESC`,
+    [ADMIN_EMAILS]
   );
   res.json({ tenants: result.rows });
 });

@@ -108,6 +108,7 @@ async function apiRequest(path, { method = 'GET', token, body } = {}) {
     method,
     headers: {
       'Content-Type': 'application/json',
+      'X-Reach-App': 'billing',
       ...(token ? { Authorization: `Bearer ${token}` } : {})
     },
     body: body === undefined ? undefined : JSON.stringify(body)
@@ -251,6 +252,48 @@ const industryPresets = {
       ['Spa Package', 'Package', 'Spa and relaxation package', '9997', 'Package', 3500, 18, 'Package'],
       ['Party Makeup', 'Makeup', 'Party makeup service', '9997', 'Service', 3000, 18, 'Makeup'],
       ['Bridal Makeup', 'Makeup', 'Bridal makeup package', '9997', 'Package', 12000, 18, 'Makeup']
+    ]
+  },
+  cosmetics: {
+    label: 'Beauty Product & Cosmetics Brand',
+    clientLabel: 'Customer',
+    itemLabel: 'Product / Service',
+    itemPluralLabel: 'Products & Services',
+    categoryLabel: 'Product Category',
+    invoicePrefix: 'BILL',
+    quotationPrefix: 'QT',
+    terms: 'Products once opened or used cannot be returned. Shade, variant and batch details should be confirmed before dispatch. Payment due as per agreed terms.',
+    serviceTypes: ['Skincare', 'Makeup', 'Haircare', 'Fragrance', 'Bundle', 'Wholesale', 'Brand Service', 'Logistics'],
+    services: [
+      ['Face Cream', 'Skincare', 'Moisturising face cream retail unit', '3304', 'Piece', 499, 18, 'Skincare'],
+      ['Face Serum', 'Skincare', 'Active skincare serum retail unit', '3304', 'Piece', 799, 18, 'Skincare'],
+      ['Sunscreen', 'Skincare', 'SPF sunscreen lotion or gel', '3304', 'Piece', 599, 18, 'Skincare'],
+      ['Face Wash', 'Skincare', 'Daily cleansing face wash', '3304', 'Piece', 299, 18, 'Skincare'],
+      ['Toner / Mist', 'Skincare', 'Hydrating toner or facial mist', '3304', 'Piece', 349, 18, 'Skincare'],
+      ['Lip Balm', 'Skincare', 'Lip care balm retail unit', '3304', 'Piece', 149, 18, 'Skincare'],
+      ['Lipstick', 'Makeup', 'Lipstick retail unit with shade detail', '3304', 'Piece', 599, 18, 'Makeup'],
+      ['Lip Gloss', 'Makeup', 'Lip gloss retail unit with shade detail', '3304', 'Piece', 499, 18, 'Makeup'],
+      ['Foundation', 'Makeup', 'Foundation bottle or tube with shade detail', '3304', 'Piece', 899, 18, 'Makeup'],
+      ['Compact Powder', 'Makeup', 'Compact powder retail unit', '3304', 'Piece', 699, 18, 'Makeup'],
+      ['Kajal / Eyeliner', 'Makeup', 'Eye makeup retail unit', '3304', 'Piece', 249, 18, 'Makeup'],
+      ['Mascara', 'Makeup', 'Mascara retail unit', '3304', 'Piece', 499, 18, 'Makeup'],
+      ['Nail Polish', 'Makeup', 'Nail colour retail unit', '3304', 'Piece', 199, 18, 'Makeup'],
+      ['Shampoo', 'Haircare', 'Hair cleansing shampoo bottle', '3305', 'Piece', 399, 18, 'Haircare'],
+      ['Conditioner', 'Haircare', 'Hair conditioner bottle', '3305', 'Piece', 449, 18, 'Haircare'],
+      ['Hair Oil / Serum', 'Haircare', 'Hair oil or serum retail unit', '3305', 'Piece', 349, 18, 'Haircare'],
+      ['Perfume / Body Mist', 'Fragrance', 'Fragrance bottle retail unit', '3303', 'Piece', 999, 18, 'Fragrance'],
+      ['Gift Hamper', 'Bundle', 'Curated beauty gift hamper', '3304', 'Hamper', 1499, 18, 'Bundle'],
+      ['Skincare Combo', 'Bundle', 'Bundled skincare product kit', '3304', 'Kit', 1299, 18, 'Bundle'],
+      ['Makeup Combo', 'Bundle', 'Bundled makeup product kit', '3304', 'Kit', 1799, 18, 'Bundle'],
+      ['Trial / Sample Kit', 'Bundle', 'Mini product sample kit', '3304', 'Kit', 299, 18, 'Bundle'],
+      ['Wholesale Case', 'Wholesale', 'Bulk product case for reseller or distributor', '3304', 'Case', 12000, 18, 'Wholesale'],
+      ['Distributor Order', 'Wholesale', 'Distributor supply order', '3304', 'Order', 25000, 18, 'Wholesale'],
+      ['Private Label Batch', 'Brand Service', 'Private label cosmetic production batch', '9988', 'Batch', 50000, 18, 'Brand Service'],
+      ['Custom Label Design', 'Brand Service', 'Product label or packaging artwork service', '9983', 'Design', 3000, 18, 'Brand Service'],
+      ['Product Photography', 'Brand Service', 'Product photography for catalogue or ecommerce', '9983', 'Shoot', 8000, 18, 'Brand Service'],
+      ['Influencer PR Kit', 'Brand Service', 'Influencer seeding or PR kit preparation', '9983', 'Kit', 2500, 18, 'Brand Service'],
+      ['Packaging Charge', 'Logistics', 'Outer box, bubble wrap or gift packing charge', '9985', 'Order', 100, 18, 'Logistics'],
+      ['Shipping Charge', 'Logistics', 'Courier or delivery charge', '9968', 'Order', 120, 18, 'Logistics']
     ]
   },
   professional: {
@@ -625,6 +668,40 @@ const presetExtensions = {
       ['Pre-bridal Package', 'Package', 'Pre-bridal grooming package', '9997', 'Package', 18000, 18, 'Package']
     ]
   },
+  cosmetics: {
+    services: [
+      ['Cleanser', 'Skincare', 'Gentle skin cleanser retail unit', '3304', 'Piece', 349, 18, 'Skincare'],
+      ['Moisturizer', 'Skincare', 'Daily moisturizer retail unit', '3304', 'Piece', 549, 18, 'Skincare'],
+      ['Night Cream', 'Skincare', 'Night repair cream retail unit', '3304', 'Piece', 699, 18, 'Skincare'],
+      ['Sheet Mask', 'Skincare', 'Single-use sheet mask', '3304', 'Piece', 149, 18, 'Skincare'],
+      ['Scrub / Exfoliator', 'Skincare', 'Face or body exfoliator retail unit', '3304', 'Piece', 399, 18, 'Skincare'],
+      ['Body Lotion', 'Skincare', 'Body care lotion bottle', '3304', 'Piece', 449, 18, 'Skincare'],
+      ['Body Wash', 'Skincare', 'Body wash or shower gel bottle', '3304', 'Piece', 399, 18, 'Skincare'],
+      ['Concealer', 'Makeup', 'Concealer retail unit with shade detail', '3304', 'Piece', 599, 18, 'Makeup'],
+      ['Blush', 'Makeup', 'Blush compact or liquid unit', '3304', 'Piece', 649, 18, 'Makeup'],
+      ['Highlighter', 'Makeup', 'Highlighter retail unit', '3304', 'Piece', 749, 18, 'Makeup'],
+      ['Eyeshadow Palette', 'Makeup', 'Eyeshadow palette retail unit', '3304', 'Palette', 1299, 18, 'Makeup'],
+      ['Makeup Brush Set', 'Makeup', 'Brush set or beauty tool kit', '9603', 'Set', 999, 18, 'Makeup'],
+      ['Makeup Sponge', 'Makeup', 'Beauty blender or sponge unit', '9616', 'Piece', 199, 18, 'Makeup'],
+      ['Hair Mask', 'Haircare', 'Hair treatment mask retail unit', '3305', 'Piece', 699, 18, 'Haircare'],
+      ['Leave-in Cream', 'Haircare', 'Leave-in hair cream retail unit', '3305', 'Piece', 499, 18, 'Haircare'],
+      ['Roll-on / Deodorant', 'Fragrance', 'Roll-on or deodorant retail unit', '3307', 'Piece', 299, 18, 'Fragrance'],
+      ['Luxury Perfume', 'Fragrance', 'Premium fragrance bottle', '3303', 'Piece', 2499, 18, 'Fragrance'],
+      ['Festive Gift Box', 'Bundle', 'Seasonal beauty gift box', '3304', 'Box', 1999, 18, 'Bundle'],
+      ['Travel Kit', 'Bundle', 'Travel-size beauty essentials kit', '3304', 'Kit', 899, 18, 'Bundle'],
+      ['Subscription Beauty Box', 'Bundle', 'Monthly beauty subscription box', '3304', 'Box', 999, 18, 'Bundle'],
+      ['Tester Display Unit', 'Wholesale', 'Tester product set for retail counter', '3304', 'Set', 3500, 18, 'Wholesale'],
+      ['Retail Counter Starter Pack', 'Wholesale', 'Starter inventory pack for reseller counter', '3304', 'Pack', 30000, 18, 'Wholesale'],
+      ['Salon Retail Supply', 'Wholesale', 'Bulk supply order for salon retail shelf', '3304', 'Order', 18000, 18, 'Wholesale'],
+      ['Marketplace Listing Setup', 'Brand Service', 'Amazon, Flipkart or marketplace listing setup', '9983', 'Product', 1500, 18, 'Brand Service'],
+      ['E-commerce Catalogue Setup', 'Brand Service', 'Website catalogue product upload and setup', '9983', 'Product', 800, 18, 'Brand Service'],
+      ['Barcode / Batch Label Setup', 'Brand Service', 'Barcode, batch or MRP label preparation', '9983', 'SKU', 500, 18, 'Brand Service'],
+      ['Product Launch Campaign', 'Brand Service', 'Launch creative and campaign planning service', '9983', 'Campaign', 25000, 18, 'Brand Service'],
+      ['Return / Damage Adjustment', 'Logistics', 'Return, damage or exchange adjustment entry', '0000', 'Adjustment', 0, 0, 'Logistics'],
+      ['COD Handling Charge', 'Logistics', 'Cash-on-delivery handling charge', '9968', 'Order', 50, 18, 'Logistics'],
+      ['Express Delivery Charge', 'Logistics', 'Priority dispatch or express delivery charge', '9968', 'Order', 250, 18, 'Logistics']
+    ]
+  },
   professional: {
     services: [
       ['TDS Return Filing', 'Compliance', 'Quarterly TDS return filing', '9982', 'Quarter', 3000, 18, 'Filing'],
@@ -758,6 +835,17 @@ const calculatorPresets = {
     primaryRateLabel: 'Rate per Service',
     primaryUnit: 'Service',
     extraLabel: 'Product / Travel Charges'
+  },
+  cosmetics: {
+    navLabel: 'Product Calculator',
+    title: 'Beauty Product Order Calculator',
+    readyText: 'The quotation will carry product quantity, unit rate, packaging or shipping charges, GST and final amount.',
+    workTypeOptions: ['Retail Product Order', 'Wholesale Supply', 'Gift Hamper', 'Sample Kit', 'Private Label Batch', 'PR Kit'],
+    itemName: 'Beauty Product Order',
+    primaryLabel: 'Products / Kits',
+    primaryRateLabel: 'Rate per Product / Kit',
+    primaryUnit: 'Piece',
+    extraLabel: 'Packaging / Shipping Charges'
   },
   professional: {
     navLabel: 'Fee Calculator',
@@ -1372,7 +1460,7 @@ function App() {
           <div className="topbar-title">
             <h1>{navLabel(active, navItems.find(([id]) => id === active)?.[1])}</h1>
             <p>{formatDate(today())}</p>
-            <AccountBadge organization={auth.user?.organization} />
+            <AccountBadge organization={auth.user?.organization} user={auth.user} />
           </div>
           <div className="topbar-actions">
             <button className="ghost topbar-action" onClick={() => navigate('settings')}>
@@ -1409,7 +1497,10 @@ function AccessIssueScreen({ message, user, onLogout }) {
   );
 }
 
-function AccountBadge({ organization }) {
+function AccountBadge({ organization, user }) {
+  if (user?.isPlatformAdmin) {
+    return <span className="account-badge admin">Platform Admin</span>;
+  }
   if (!organization?.status) return null;
   const trialEnd = toInputDate(organization.trialEndsAt);
   const subscriptionEnd = toInputDate(organization.subscriptionEndsAt);
@@ -2707,10 +2798,13 @@ function AdminPanel({ auth, notify }) {
   const loadTenants = React.useCallback(() => {
     setLoading(true);
     apiRequest('/api/admin/tenants', { token: auth.token })
-      .then((result) => setTenants(result.tenants || []))
+      .then((result) => {
+        const adminEmail = normalizeEmail(auth.user?.email);
+        setTenants((result.tenants || []).filter((tenant) => normalizeEmail(tenant.owner_email) !== adminEmail));
+      })
       .catch((error) => notify(error.message))
       .finally(() => setLoading(false));
-  }, [auth.token]);
+  }, [auth.token, auth.user?.email]);
 
   React.useEffect(() => {
     loadTenants();

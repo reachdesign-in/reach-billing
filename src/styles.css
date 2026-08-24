@@ -48,6 +48,7 @@ main { min-width: 0; }
 .topbar-action i { color: var(--primary-dark); font-size: 13px; }
 .account-badge { display: inline-flex; width: fit-content; margin-top: 6px; padding: 3px 8px; border-radius: 999px; background: var(--primary-soft); color: var(--primary-dark); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .4px; }
 .account-badge.active { background: #e5f7ed; color: #166534; }
+.account-badge.admin { background: #111827; color: #fff; }
 .account-badge.suspended, .account-badge.disabled, .account-badge.expired { background: #fff0f0; color: #a02828; }
 .page { padding: 24px 28px 40px; max-width: 1540px; margin: 0 auto; }
 
