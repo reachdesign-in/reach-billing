@@ -367,6 +367,17 @@ app.get('/api/records/:key', requireAuth, requireActiveOrganization, async (req,
   }
 });
 
+app.get('/api/health', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  try {
+    await pool.query('SELECT 1');
+    res.json({ ok: true, database: 'connected' });
+  } catch (error) {
+    console.error('Health check failed:', error.message);
+    res.status(503).json({ ok: false, database: 'unavailable' });
+  }
+});
+
 app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
