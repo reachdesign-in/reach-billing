@@ -2920,6 +2920,25 @@ function CompanySettings({ ctx }) {
     setDirty(true);
     setForm(nextSettings);
   };
+  const addMissingDefaults = () => confirmThen({
+    title: 'Add missing default services?',
+    message: `Add any missing ${getBusinessPreset(form.businessType).label} defaults without changing or deleting your existing services/items?`,
+    confirmText: 'Yes, add missing',
+    cancelText: 'No'
+  }, () => {
+    const defaults = makeServices(form.businessType);
+    const serviceKey = (service) => `${String(service.name || '').trim().toLowerCase()}|${String(service.category || '').trim().toLowerCase()}`;
+    const existingKeys = new Set(data.services.map(serviceKey));
+    const missing = defaults.filter((service) => !existingKeys.has(serviceKey(service)));
+    const merged = [...data.services, ...missing];
+    setters.setSettings(form);
+    persistCloud('companySettings', form);
+    setters.setServices(merged);
+    persistCloud('services', merged);
+    notify(missing.length ? `${missing.length} missing services/items added` : 'All default services/items are already available');
+    setDirty(false);
+    setUploadNotice('');
+  });
   const saveSettings = () => confirmThen({
     title: 'Save company settings?',
     message: `Are you sure to save company settings and load ${getBusinessPreset(form.businessType).label} default services/items?`,
@@ -2964,7 +2983,10 @@ function CompanySettings({ ctx }) {
             {fields.map(([key, label, type]) => <Field key={key} label={label} type={type || 'text'} value={form[key]} onChange={(v) => updateSetting(key, v)} />)}
           </div>
         </div>
-        <div className="modal-actions"><button type="button" onClick={saveSettings}>Save Settings</button></div>
+        <div className="modal-actions">
+          <button type="button" className="ghost" onClick={addMissingDefaults}>Add Missing Default Services</button>
+          <button type="button" onClick={saveSettings}>Save Settings & Replace Services</button>
+        </div>
       </Panel>
     </section>
   );
