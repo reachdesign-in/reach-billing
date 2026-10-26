@@ -2992,6 +2992,10 @@ function CompanySettings({ ctx }) {
   );
 }
 
+function normalizeEmail(email) {
+  return String(email || '').trim().toLowerCase();
+}
+
 function CrudSection({ title, singular, rows, columns, searchKeys, getStatus, fields, clients = [], onSave, onDelete, detail, externalModal, setExternalModal, customForm }) {
   const [modal, setModal] = React.useState(null);
   const [view, setView] = React.useState(null);
@@ -3004,7 +3008,14 @@ function CrudSection({ title, singular, rows, columns, searchKeys, getStatus, fi
     const hay = searchKeys.map((key) => row[key]).join(' ').toLowerCase();
     return hay.includes(search.toLowerCase()) && (!status || getStatus(row) === status);
   });
-  const blank = fields.reduce((acc, [key]) => ({ ...acc, [key]: key === 'date' || key === 'startDate' ? today() : '' }), { id: uid() });
+  const blank = fields.reduce((acc, [key, type, , options]) => ({
+    ...acc,
+    [key]: key === 'date' || key === 'startDate'
+      ? today()
+      : type === 'select' && options?.length
+        ? options[0]
+        : ''
+  }), { id: uid() });
   return (
     <section className="page">
       <Toolbar search={search} setSearch={setSearch} status={status} setStatus={setStatus} statuses={statuses} actionLabel={`Add ${singular}`} onAction={() => setActiveModal(blank)} />
@@ -3273,7 +3284,9 @@ function removeRecord({ collection, label, record, setter, notify, moveToTrash, 
 }
 
 function validate(record, fields) {
-  const missing = fields.filter(([, , required]) => required).some(([key]) => !record[key]);
+  const missing = fields
+    .filter(([, , required]) => required)
+    .some(([key]) => record[key] == null || (typeof record[key] === 'string' && !record[key].trim()));
   if (missing) {
     alert('Please complete required fields.');
     return false;
